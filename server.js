@@ -214,3 +214,8 @@ if (compilerUrl && start_url) {
   console.log(`  > Local Previewer: http://${SERVER_NAME}:${port}/`);
   console.log(`previewer ready`);
 })();
+
+process.on('disconnect', function() {
+  console.log('parent exited')
+  process.exit();
+});
