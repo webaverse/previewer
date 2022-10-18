@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+
+<head>
+<title>Previewer - Webaverse</title>
+</head>
+
+<body>
+  <form id=form>
+    <input type="text" value="/avatars/ann.vrm" placeholder="https://" id="u" />
+    <input type="text" value="image/png+icon" placeholder="image/png+icon" id="mimeType" />
+    <input type="submit">
+  </form>
+  <script type="module">
+const form = document.getElementById('form');
+const u = document.getElementById('u');
+const mimeType = document.getElementById('mimeType');
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  if (u.value && mimeType.value) {
+    window.location.href = `/?u=${encodeURI(u.value)}&mimeType=${encodeURIComponent(mimeType.value)}`;
+  } else {
+    console.warn('missing inputs');
+  }
+})
+  </script>
+</body>
+
+</html>

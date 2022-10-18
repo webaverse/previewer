@@ -1,10 +1,18 @@
 import http from 'http';
 // import https from 'https';
+import path from 'path';
+import fs from 'fs';
 import express from 'express';
 import puppeteer from 'puppeteer';
 
+//
+
 const SERVER_ADDR = '0.0.0.0';
 const SERVER_NAME = 'local-previewer.webaverse.com';
+
+//
+
+const dirname = path.dirname(import.meta.url.replace(/^[a-z]+:\/\//, ''));
 
 //
 
@@ -187,27 +195,33 @@ if (compilerUrl && start_url) {
   app.all('*', async (req, res, next) => {
     // console.log('got headers', req.method, req.url, req.headers);
 
-    // parse the URL and query string, making sure the protocol is correct
-    const url = new URL(req.url, `${req.protocol}://${req.headers.host}`);
-    const {searchParams} = url;
-    const start_url = searchParams.get('u');
-    const mimeType = searchParams.get('mimeType');
-
-    if (start_url && mimeType) {
-      try {
-        const {
-          contentType,
-          body,
-        } = await _render(start_url, mimeType);
-        res.setHeader('Content-Type', contentType);
-        res.end(body);
-      } catch(err) {
-        console.warn(err.stack);
-        res.setHeader('Content-Type', 'text/plain');
-        res.status(500).send(err.stack);
-      }
+    if (req.url === '/') {
+      res.setHeader('Content-Type', 'text/html');
+      const rs = fs.createReadStream(dirname + '/index.html');
+      rs.pipe(res);
     } else {
-      res.status(404).end('invalid query');
+      // parse the URL and query string, making sure the protocol is correct
+      const url = new URL(req.url, `${req.protocol}://${req.headers.host}`);
+      const {searchParams} = url;
+      const start_url = searchParams.get('u');
+      const mimeType = searchParams.get('mimeType');
+
+      if (start_url && mimeType) {
+        try {
+          const {
+            contentType,
+            body,
+          } = await _render(start_url, mimeType);
+          res.setHeader('Content-Type', contentType);
+          res.end(body);
+        } catch(err) {
+          console.warn(err.stack);
+          res.setHeader('Content-Type', 'text/plain');
+          res.status(500).send(err.stack);
+        }
+      } else {
+        res.status(404).end('invalid query');
+      }
     }
   });
 
