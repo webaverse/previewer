@@ -123,6 +123,7 @@ const _startPostbackServer = () => (async () => {
 
 const port = parseInt(process.env.PORT, 10) || 8888;
 const compilerUrl = process.argv[2] || `https://127.0.0.1/`;
+const MAX_TIMEOUT = 120 * 1000;
 /* const start_url = process.argv[3];
 const mimeType = process.argv[4] || 'application/octet-stream';
 
@@ -172,6 +173,7 @@ if (compilerUrl && start_url) {
       req.on('error', promise.reject);
     });
     
+    page.setDefaultNavigationTimeout(MAX_TIMEOUT);
     await page.goto(u);
 
     const result = await promise;
