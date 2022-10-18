@@ -216,6 +216,6 @@ if (compilerUrl && start_url) {
 })();
 
 process.on('disconnect', function() {
-  console.log('parent exited')
+  console.log('previewer parent exited')
   process.exit();
 });
