@@ -8,7 +8,7 @@ const SERVER_NAME = 'local-previewer.webaverse.com';
 
 //
 
-// curl 'http://local-previewer.webaverse.com:8888/?u=/avatars/ann.vrm&mimeType=image/png'
+// curl 'http://local-previewer.webaverse.com:4444/?u=/avatars/ann.vrm&mimeType=image/png'
 
 //
 
