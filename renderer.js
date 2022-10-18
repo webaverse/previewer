@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer';
 
 //
 
-// node ./renderer.js https://127.0.0.1/ https://webaverse.github.io/silsword/
+// node ./renderer.js https://127.0.0.1/ https://webaverse.github.io/silsword/ image/png
 
 //
 
@@ -116,6 +116,7 @@ const _startPostbackServer = () => (async () => {
 
 const compilerUrl = process.argv[2];
 const start_url = process.argv[3];
+const mimeType = process.argv[4] || 'application/octet-stream';
 
 if (compilerUrl && start_url) {
   (async () => {
@@ -129,7 +130,7 @@ if (compilerUrl && start_url) {
     const page = await browser.newPage();
 
     const id = makeId();
-    const u = compilerUrl.replace(/\/+$/, '') + '/preview.html?u=' + encodeURI(start_url) + '&cbUrl=' + encodeURI(postbackServer.cbUrl + '/?id=' + id);
+    const u = compilerUrl.replace(/\/+$/, '') + '/preview.html?u=' + encodeURI(start_url) + '&type=' + encodeURIComponent(mimeType) + '&cbUrl=' + encodeURI(postbackServer.cbUrl + '/?id=' + id);
     
     const promise = makePromise();
     cbs.set(id, (req, res) => {
