@@ -40,10 +40,13 @@ const CB_PORT = PORT + 1;
 
 //
 
-const handleProxy = (req, res) => {
+const handleReponse = (statusCode, req, res) => {
   // console.log('got cb', req.status, req.url, req.statusCode);
   // const rs = stream.Readable.fromWeb(response.body);
   // process.stdout.end(rs);
+
+  console.warn('page response status code', statusCode);
+
   req.pipe(process.stdout);
 
   req.on('end', () => {
@@ -76,6 +79,7 @@ const _startPostbackServer = () => (async () => {
         } else {
           // console.log('postback to 1');
           const url = new URL(req.url, `${req.protocol}://${req.headers.host}`);
+          const proxyStatusCode = req.headers['x-proxy-status-code'] || 200;
           const {searchParams} = url;
           const id = searchParams.get('id');
           // console.log('postback', {url: req.url, headers: req.headers, id});
@@ -83,7 +87,7 @@ const _startPostbackServer = () => (async () => {
           let cb = cbs.get(id);
           if (cb) {
             cbs.delete(id);
-            cb(req, res);
+            cb(proxyStatusCode, req, res);
           } else {
             // throw new Error('no cb for id: ' + id);
             res.status(404).end('no cb for id: ' + id);
@@ -135,8 +139,8 @@ if (compilerUrl && start_url) {
     console.warn(u);
 
     const promise = makePromise();
-    cbs.set(id, (req, res) => {
-      handleProxy(req, res);
+    cbs.set(id, (statusCode, req, res) => {
+      handleReponse(statusCode, req, res);
       
       req.on('end', promise.accept);
       req.on('error', promise.reject);
