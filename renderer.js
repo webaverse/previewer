@@ -132,6 +132,8 @@ if (compilerUrl && start_url) {
     const id = makeId();
     const u = compilerUrl.replace(/\/+$/, '') + '/preview.html?u=' + encodeURI(start_url) + '&type=' + encodeURIComponent(mimeType) + '&cbUrl=' + encodeURI(postbackServer.cbUrl + '/?id=' + id);
     
+    console.warn(u);
+
     const promise = makePromise();
     cbs.set(id, (req, res) => {
       handleProxy(req, res);
