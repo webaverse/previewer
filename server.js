@@ -211,5 +211,6 @@ if (compilerUrl && start_url) {
     });
     httpServer.on('error', reject);
   });
-  console.log(`  > Local: http://${SERVER_NAME}:${port}/`);
+  console.log(`  > Local Previewer: http://${SERVER_NAME}:${port}/`);
+  console.log(`previewer ready`);
 })();
