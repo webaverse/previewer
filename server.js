@@ -48,7 +48,7 @@ const handleReponse = (statusCode, req, res) => {
   // const rs = stream.Readable.fromWeb(response.body);
   // process.stdout.end(rs);
 
-  console.warn('page response status code', statusCode);
+  // console.warn('page response status code', statusCode);
 
   req.pipe(process.stdout);
 
@@ -156,7 +156,7 @@ if (compilerUrl && start_url) {
 
     const promise = makePromise();
     cbs.set(id, (statusCode, req, res) => {
-      handleReponse(statusCode, req, res);
+      // handleReponse(statusCode, req, res);
 
       const buffers = [];
       req.on('data', data => {
@@ -164,7 +164,10 @@ if (compilerUrl && start_url) {
       });
       req.on('end', () => {
         res.end();
-        promise.accept(Buffer.concat(buffers));
+        promise.accept({
+          contentType: req.headers['content-type'],
+          body: Buffer.concat(buffers),
+        });
       });
       
       req.on('end', promise.accept);
@@ -173,11 +176,11 @@ if (compilerUrl && start_url) {
     
     await page.goto(u);
 
-    const buffer = await promise;
+    const result = await promise;
 
     // await browser.close();
 
-    return buffer;
+    return result;
   };
 
   const app = express();
@@ -191,9 +194,18 @@ if (compilerUrl && start_url) {
     const mimeType = searchParams.get('mimeType');
 
     if (start_url && mimeType) {
-      const buffer = await _render(start_url, mimeType);
-      res.setHeader('Content-Type', mimeType);
-      res.end(buffer);
+      try {
+        const {
+          contentType,
+          body,
+        } = await _render(start_url, mimeType);
+        res.setHeader('Content-Type', contentType);
+        res.end(body);
+      } catch(err) {
+        console.warn(err.stack);
+        res.setHeader('Content-Type', 'text/plain');
+        res.status(500).send(err.stack);
+      }
     } else {
       res.status(404).end('invalid query');
     }
