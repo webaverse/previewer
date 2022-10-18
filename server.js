@@ -121,10 +121,8 @@ const _startPostbackServer = () => (async () => {
   };
 })();
 
-const compilerUrl = process.argv[2]; // https://127.0.0.1/
-if (!compilerUrl) {
-  throw new Error('no compiler url specified');
-}
+const port = parseInt(process.env.PORT, 10) || 8888;
+const compilerUrl = process.argv[2] || `https://127.0.0.1/`;
 /* const start_url = process.argv[3];
 const mimeType = process.argv[4] || 'application/octet-stream';
 
@@ -210,8 +208,6 @@ if (compilerUrl && start_url) {
       res.status(404).end('invalid query');
     }
   });
-
-  const port = parseInt(process.env.PORT, 10) || 8888;
 
   const _makeHttpServer = () => http.createServer(app);
   const httpServer = _makeHttpServer();
