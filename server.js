@@ -153,6 +153,7 @@ if (compilerUrl && start_url) {
     // offline: false,
     ignoreHTTPSErrors: true,
   });
+
   const _render = async (start_url, mimeType) => {
     const page = await browser.newPage();
 
