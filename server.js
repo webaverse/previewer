@@ -244,3 +244,7 @@ process.on('disconnect', function() {
   console.log('previewer parent exited')
   process.exit();
 });
+process.on('SIGTERM', function() {
+  console.log('previewer SIGTERM')
+  process.exit();
+});
