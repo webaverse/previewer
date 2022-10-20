@@ -221,7 +221,7 @@ if (compilerUrl && start_url) {
           res.status(500).send(err.stack);
         }
       } else {
-        res.status(404).end('invalid query');
+        res.status(404).end('invalid query: ' + JSON.stringify({start_url, mimeType}));
       }
     }
   });
