@@ -16,6 +16,11 @@
     <input type="text" value="image/png+profile" placeholder="image/png+profile" id="mimeType2" />
     <input type="submit">
   </form>
+  <form id=form3>
+    <input type="text" value="/homespace-island/" placeholder="https://" id="u3" />
+    <input type="text" value="image/png+birdseye" placeholder="image/png+birdseye" id="mimeType3" />
+    <input type="submit">
+  </form>
   <script type="module">
 // form 1
 const form1 = document.getElementById('form1');
@@ -42,6 +47,21 @@ form2.addEventListener('submit', e => {
 
   if (u2.value && mimeType2.value) {
     window.location.href = `/?u=${encodeURI(u2.value)}&mimeType=${encodeURIComponent(mimeType2.value)}`;
+  } else {
+    console.warn('missing inputs');
+  }
+});
+
+// form 3
+const form3 = document.getElementById('form3');
+const u3 = document.getElementById('u3');
+const mimeType3 = document.getElementById('mimeType3');
+form3.addEventListener('submit', e => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  if (u3.value && mimeType3.value) {
+    window.location.href = `/?u=${encodeURI(u3.value)}&mimeType=${encodeURIComponent(mimeType3.value)}`;
   } else {
     console.warn('missing inputs');
   }
