@@ -154,11 +154,11 @@ if (compilerUrl && start_url) {
     ignoreHTTPSErrors: true,
   });
 
-  const _render = async (start_url, mimeType) => {
+  const _render = async (start_url, mimeType, args) => {
     const page = await browser.newPage();
 
     const id = makeId();
-    const u = compilerUrl.replace(/\/+$/, '') + '/preview.html?u=' + encodeURI(start_url) + '&type=' + encodeURIComponent(mimeType) + '&cbUrl=' + encodeURI(postbackServer.cbUrl + '/?id=' + id);
+    const u = compilerUrl.replace(/\/+$/, '') + '/preview.html?u=' + encodeURI(start_url) + '&type=' + encodeURIComponent(mimeType) + (args ? ('&args=' + encodeURIComponent(args)) : '') + '&cbUrl=' + encodeURI(postbackServer.cbUrl + '/?id=' + id);
     
     console.warn(u);
 
@@ -193,11 +193,11 @@ if (compilerUrl && start_url) {
   };
 
   const requestCache = new Map();
-  const _cachedRender = (start_url, mimeType, cache) => {
-    const key = start_url + ':' + mimeType + ':' + cache;
+  const _cachedRender = (start_url, mimeType, args, cache) => {
+    const key = start_url + ':' + mimeType + ':' + args + ':' + cache;
     let p = requestCache.get(key);
     if (!p) {
-      p = _render(start_url, mimeType);
+      p = _render(start_url, mimeType, args);
       requestCache.set(key, p);
     }
     return p;
@@ -217,6 +217,7 @@ if (compilerUrl && start_url) {
       const {searchParams} = url;
       const start_url = searchParams.get('u');
       const mimeType = searchParams.get('mimeType');
+      const args = searchParams.get('args') || '';
       const cache = searchParams.get('cache') || '';
 
       if (start_url && mimeType) {
@@ -224,7 +225,7 @@ if (compilerUrl && start_url) {
           const {
             contentType,
             body,
-          } = await _cachedRender(start_url, mimeType, cache);
+          } = await _cachedRender(start_url, mimeType, args, cache);
           res.setHeader('Content-Type', contentType);
           res.end(body);
         } catch(err) {
