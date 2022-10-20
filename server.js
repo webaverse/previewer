@@ -192,6 +192,17 @@ if (compilerUrl && start_url) {
     return result;
   };
 
+  const requestCache = new Map();
+  const _cachedRender = (start_url, mimeType, cache) => {
+    const key = start_url + ':' + mimeType + ':' + cache;
+    let p = requestCache.get(key);
+    if (!p) {
+      p = _render(start_url, mimeType);
+      requestCache.set(key, p);
+    }
+    return p;
+  };
+
   const app = express();
   app.all('*', async (req, res, next) => {
     // console.log('got headers', req.method, req.url, req.headers);
@@ -206,13 +217,14 @@ if (compilerUrl && start_url) {
       const {searchParams} = url;
       const start_url = searchParams.get('u');
       const mimeType = searchParams.get('mimeType');
+      const cache = searchParams.get('cache') || '';
 
       if (start_url && mimeType) {
         try {
           const {
             contentType,
             body,
-          } = await _render(start_url, mimeType);
+          } = await _cachedRender(start_url, mimeType, cache);
           res.setHeader('Content-Type', contentType);
           res.end(body);
         } catch(err) {
