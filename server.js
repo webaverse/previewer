@@ -227,6 +227,9 @@ if (compilerUrl && start_url) {
             body,
           } = await _cachedRender(start_url, mimeType, args, cache);
           res.setHeader('Content-Type', contentType);
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.setHeader('Access-Control-Allow-Methods', '*');
+          res.setHeader('Access-Control-Allow-Headers', '*');
           res.end(body);
         } catch(err) {
           console.warn(err.stack);
