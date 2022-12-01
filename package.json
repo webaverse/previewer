@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "puppeteer": "^19.0.0"
+    "puppeteer": "^19.0.0",
+    "https-proxy-agent": "^5.0.0"
   }
 }
