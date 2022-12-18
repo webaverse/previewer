@@ -275,7 +275,7 @@ if (compilerUrl && start_url) {
   const _cachedRender = (start_url, funcName, argsData, cache) => {
     // const key = start_url + ':' + funcName + ':' + args + ':' + cache;
     const key = cache;
-    let p = requestCache.get(key);
+    let p = key ? requestCache.get(key) : null;
     // console.log('cached render had', {start_url, funcName, had: !!p});
     if (!p) {
       p = _render(start_url, funcName, argsData);
