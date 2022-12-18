@@ -8,7 +8,9 @@ import puppeteer from 'puppeteer';
 //
 
 const SERVER_ADDR = '0.0.0.0';
-const SERVER_NAME = 'local-previewer.webaverse.com';
+const SERVER_NAME = 'local-renderer.webaverse.com';
+const PORT = parseInt(process.env.PORT, 10) ?? 5555;
+const CB_PORT = PORT + 1;
 
 //
 
@@ -45,9 +47,6 @@ function makePromise() {
 //
 
 const cbs = new Map();
-
-const PORT = parseInt(process.env.PORT, 10) || 4444;
-const CB_PORT = PORT + 1;
 
 //
 
