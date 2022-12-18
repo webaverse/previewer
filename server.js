@@ -18,7 +18,7 @@ const dirname = path.dirname(import.meta.url.replace(/^[a-z]+:\/\//, ''));
 
 //
 
-// curl 'http://local-previewer.webaverse.com:4444/?u=/avatars/ann.vrm&mimeType=image/png'
+// curl 'http://local-renderer.webaverse.com:4444/?u=/avatars/ann.vrm&mimeType=image/png'
 
 //
 
