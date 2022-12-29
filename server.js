@@ -206,6 +206,10 @@ if (compilerUrl && start_url) {
     // console.log('await new page');
 
     const page = await browser.newPage();
+    page.on('pageerror', err => {
+      console.warn('closing page due to page error', start_url, funcName, err);
+      page.close();
+    });
 
     // console.log('renderer render', {
     //   start_url,
